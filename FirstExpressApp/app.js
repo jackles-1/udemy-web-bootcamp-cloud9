@@ -19,6 +19,16 @@ app.get("/dog", function(req, res){
    console.log("GET request to /dog");
 });
 
+app.get("/r/:subredditName", function(req, res){
+   var subreddit = req.params.subredditName;
+   res.send("Welcome to the " + subreddit + " subreddit!");
+});
+
+app.get("/r/:subredditName/comments/:id/:title", function(req, res) {
+   var subreddit = req.params.subredditName;
+   res.send("Welcome to the comments page of the " + subreddit + " subreddit!"); 
+});
+
 // Catches GET request so any addres not defined in another route above. First route that is hit that satisfies a given request will be the only one run, so this must go at the end of the routes.
 app.get("*", function(req, res){
    res.send("You are a star!");
