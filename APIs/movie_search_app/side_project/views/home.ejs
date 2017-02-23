@@ -1,0 +1,14 @@
+<% include partials/header %>
+<script type="text/javascript" src="/movie_request.js"></script>
+
+<h1>Welcome to my Movie API Site!</h1>
+
+<h2>Search for a Movie:</h2>
+<form action="/search" method="POST">
+    <input type="text" name="movieSearch" placeholder="movie title">
+    <button>Submit</button>
+</form>
+
+<ul id="results"></ul>
+
+<% include partials/footer %>
