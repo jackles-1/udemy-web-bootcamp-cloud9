@@ -14,6 +14,12 @@ app.set("view engine", "ejs");
 var campgrounds = [
     {name: "Derpground", image: "http://cdn-jpg2.theactivetimes.net/sites/default/files/camping.jpg"},
     {name: "Nerpground", image: "http://www.grindtv.com/wp-content/uploads/2015/02/shutterstock_242371765.jpg"},
+    {name: "Merpground", image: "http://travelchannel.sndimg.com/content/dam/images/travel/fullrights/2016/01/14/national-park-camping/camping-voyageurs-national-park-tent.jpg.rend.tccom.1280.960.jpeg"},
+    {name: "Derpground", image: "http://cdn-jpg2.theactivetimes.net/sites/default/files/camping.jpg"},
+    {name: "Nerpground", image: "http://www.grindtv.com/wp-content/uploads/2015/02/shutterstock_242371765.jpg"},
+    {name: "Merpground", image: "http://travelchannel.sndimg.com/content/dam/images/travel/fullrights/2016/01/14/national-park-camping/camping-voyageurs-national-park-tent.jpg.rend.tccom.1280.960.jpeg"},
+    {name: "Derpground", image: "http://cdn-jpg2.theactivetimes.net/sites/default/files/camping.jpg"},
+    {name: "Nerpground", image: "http://www.grindtv.com/wp-content/uploads/2015/02/shutterstock_242371765.jpg"},
     {name: "Merpground", image: "http://travelchannel.sndimg.com/content/dam/images/travel/fullrights/2016/01/14/national-park-camping/camping-voyageurs-national-park-tent.jpg.rend.tccom.1280.960.jpeg"}
 ];
 
