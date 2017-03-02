@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 // connect to, or create, database "cat_db"
-mongoose.connect("mongodb://localhost/cat_db")
+mongoose.connect("mongodb://localhost/cat_db");
 
 // define what a "cat" looks like--define its pattern
 var catSchema = new mongoose.Schema({
@@ -18,24 +18,24 @@ var Cat = mongoose.model("Cat", catSchema);
 
 // FIRST WAY TO CREATE A NEW CAT
 // create a new cat
-// var momo = new Cat({
-//   name: "Momo",
-//   age: 1.5,
-//   temperament: "spazz"
-// });
+var momo = new Cat({
+  name: "Momo",
+  age: 1.5,
+  temperament: "spazz"
+});
 
 // save momo to the database
 // you don't have to have the callback, but if you don't, you won't know if it doesn't work (also your timing could be off)
 // here "george" is what we are adding to the database, and "cat" is what is being returned from the database
-// momo.save(function(err, cat){
-//     if(err){
-//         console.log("Something went wrong.");
-//     }
-//     else{
-//         console.log("We just saved a cat to the database:");
-//         console.log(cat);
-//     }
-// });
+momo.save(function(err, cat){
+    if(err){
+        console.log("Something went wrong.");
+    }
+    else{
+        console.log("We just saved a cat to the database:");
+        console.log(cat);
+    }
+});
 
 // SECOND WAY TO CREATE A NEW CAT
 // this does "new" and "save" in one step
@@ -64,5 +64,4 @@ Cat.find({}, function(err, cats){
         console.log("All the cats: ");
         console.log(cats);
     }
-    
 });
