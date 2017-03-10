@@ -4,8 +4,10 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
 // Modules
-    Campground  = require("./models/campground");
+    Campground  = require("./models/campground"),
+    seedDB      = require("./seeds");
     
+seedDB();
 
 mongoose.connect("mongodb://localhost/yelp_camp");
 // needed to take in form data
@@ -14,7 +16,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 // tells it to assume templates are .ejs
 app.set("view engine", "ejs");
-
 
 app.get("/", function(req, res){
    res.render("landing");
