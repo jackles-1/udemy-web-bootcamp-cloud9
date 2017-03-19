@@ -43,15 +43,54 @@ router.get("/new", isLoggedIn, function(req, res){
 router.get("/:id", function(req, res){
    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
       if(err){
-          console.log(err);
+          console.log("Error in campgrounds SHOW.");
+          res.redirect("/campgrounds");
       } 
       else{
-          console.log(foundCampground);
           res.render("campgrounds/show", {campground: foundCampground});
       }
    });
 });
 
+// EDIT 
+router.get("/:id/edit", isLoggedIn, function(req, res){
+    Campground.findById(req.params.id, function(err, foundCampground){
+      if(err){
+          console.log("Error in campgrounds EDIT");
+          res.redirect("/campgrounds");
+      } 
+      else{
+          res.render("campgrounds/edit", {campground: foundCampground});
+      }
+   });
+});
+
+// UPDATE
+router.put("/:id", isLoggedIn, function(req, res){
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
+       if(err){
+           console.log("Error in campground UPDATE");
+           console.log(err);
+           res.redirect("/campgrounds");
+       } 
+       else{
+           res.redirect("/campgrounds/" + req.params.id);
+       }
+    });
+});
+
+// DESTROY
+router.delete("/:id", isLoggedIn, function(req, res){
+   Campground.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            res.redirect("/camprounds");
+            console.log("Error in campground DESTROY");
+        } 
+        else{
+            res.redirect("/campgrounds");
+        }
+   });
+});
 
 // LOGGED IN MIDDLEWARE
 function isLoggedIn(req, res, next){

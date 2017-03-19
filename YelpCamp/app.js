@@ -5,6 +5,7 @@ var express         = require("express"),
     mongoose        = require("mongoose"),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
+    methodOverride  = require("method-override"),
 // Modules
     Campground      = require("./models/campground"),
     Comment         = require("./models/comment"),
@@ -23,6 +24,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 // tells it to assume templates are .ejs
 app.set("view engine", "ejs");
+// sets up method override
+app.use(methodOverride("_method"));
 
 
 // SEED DB
