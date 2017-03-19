@@ -1,12 +1,15 @@
 // NPM Packages
-var express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
+var express         = require("express"),
+    app             = express(),
+    bodyParser      = require("body-parser"),
+    mongoose        = require("mongoose"),
+    passport        = require("passport"),
+    LocalStrategy   = require("passport-local"),
 // Modules
-    Campground  = require("./models/campground"),
-    Comment     = require("./models/comment"),
-    seedDB      = require("./seeds");
+    Campground      = require("./models/campground"),
+    Comment         = require("./models/comment"),
+    User            = require("./models/user"),
+    seedDB          = require("./seeds");
 
 // connect to the database
 mongoose.connect("mongodb://localhost/yelp_camp");
@@ -20,6 +23,24 @@ app.set("view engine", "ejs");
 
 // SEED DB
 seedDB();
+
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Momo is a window cat.",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// This is a middleware, that will pass currentUser on to every page. currentUser is used by header.ejs to affect the buttons on the navbar.
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
 
 // ===============================
 // CAMPGROUNDS ROUTES
@@ -80,7 +101,8 @@ app.get("/campgrounds/:id", function(req, res){
 // ===============================
 
 // CREATE
-app.post("/campgrounds/:id/comments", function(req, res){
+// We have isLoggedIn here, so that no one could insert a comment through something like Postman.
+app.post("/campgrounds/:id/comments", isLoggedIn, function(req, res){
     Campground.findById(req.params.id, function(err, campground){
        if(err){
             console.log("Error in comments CREATE Campground.findById.");
@@ -103,7 +125,7 @@ app.post("/campgrounds/:id/comments", function(req, res){
 });
 
 // NEW
-app.get("/campgrounds/:id/comments/new", function(req, res){
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(req, res){
     Campground.findById(req.params.id, function(err, campground){
        if(err){
            console.log("Error in comments NEW.");
@@ -114,6 +136,59 @@ app.get("/campgrounds/:id/comments/new", function(req, res){
     });
 });
 
+// ===============================
+// AUTH ROUTES
+// ===============================
+
+// REGISTER SHOW
+app.get("/register", function(req, res){
+    res.render("register");
+});
+
+// REGISTER
+app.post("/register", function(req, res){
+    var newUser = new User({username: req.body.username});
+   User.register(newUser, req.body.password, function(err, user){
+       if(err){
+            console.log("Error in REGISTER");
+            return res.render("register");
+       }
+      passport.authenticate("local")(req, res, function(){
+            res.redirect("/campgrounds");
+      });
+   }); 
+});
+
+// LOGIN SHOW
+app.get("/login", function(req, res){
+    res.render("login");
+});
+
+// LOGIN
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect:"/campgrounds", 
+        failureRedirect:"/login"
+        
+    }), function(req, res){
+});
+
+// LOGOUT
+app.get("/logout", function(req, res){
+   req.logout(); 
+   res.redirect("/campgrounds");
+});
+
+
+// LOGGED IN MIDDLEWARE
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
+
+// LISTENER
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("The YelpCamp server has started.");
 });

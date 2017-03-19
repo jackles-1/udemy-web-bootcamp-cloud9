@@ -7,7 +7,7 @@ var express = require("express"),
 var User = require("./models/user");
 var app = express();
 
-// Set up express-session.
+// Set up express-session. Use any random phrase as "secret" as the encryption phrase. 
 app.use(require("express-session")({
     secret: "Momo is a spazz",
     resave: false,
