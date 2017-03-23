@@ -43,6 +43,48 @@ router.get("/new", isLoggedIn, function(req, res){
     });
 });
 
+// EDIT
+// :id is a name that we set, (this is the same id used by req.params.id), but we could call it anything
+// So, :comment_id is just another variable we're setting
+router.get("/:comment_id/edit", function(req, res){
+    Comment.findById(req.params.comment_id, function(err, foundComment){
+       if(err){
+           res.redirect("back");
+           console.log("Error in Comment EDIT.");
+       } 
+       else{
+            // Here we're passing campground_id, rather than the whole campground, because that's all we need in our edit page.
+            // id here, is defined in app.js where we define the paths.
+           res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+       }
+    });
+});
+
+// UPDATE
+router.put("/:comment_id", function(req, res){
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
+        if(err){
+            res.redirect("back");
+            console.log("Error in Comment UPDATE.");
+        }
+        else{
+            res.redirect("/campgrounds/" + req.params.id);
+        }
+    });
+});
+
+// DESTROY
+router.delete("/:comment_id", function(req, res){
+   Comment.findByIdAndRemove(req.params.comment_id, function(err){
+       if(err){
+           res.redirect("/campgrounds");
+           console.log("Error in Comment DESTROY.");
+       }
+       else{
+           res.redirect("/campgrounds/" + req.params.id);
+       }
+   }) ;
+});
 
 // LOGGED IN MIDDLEWARE
 function isLoggedIn(req, res, next){

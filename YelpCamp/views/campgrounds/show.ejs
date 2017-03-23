@@ -21,12 +21,14 @@
                     </h4>
                     <p><%= campground.description %></p>
                     <p>
-                        <em>Submitted By<%= campground.author.username %></em>
+                        <em>Submitted By <%= campground.author.username %></em>
                     </p>
-                    <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
-                    <form id="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
+                    <% if(currentUser && campground.author.id.equals(currentUser._id)){ %>
+                        <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                        <form id="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    <% } %>
                 </div>
             </div>
             <div class="well">
@@ -42,6 +44,15 @@
                                 <p>
                                     <%= comment.text %>
                                 </p>
+                                <!--Note that the below is two different ways to do buttons. A a tag styled to look like a button, and a form with a button inside it.-->
+                                <!--You can also do a form with an <input type="submit"... inside of it.-->
+                                <!--For delete, we had to do a form, because that allows us to use _method-->
+                                <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">
+                                    Edit
+                                </a>
+                                <form id="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/?_method=DELETE" method="POST">
+                                    <button class="btn btn-xs btn-danger">Delete</button>
+                                </form>
                             </div>
                         </div>
                     <% }); %>
